@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+:root {
+  /* Base Colors */
+  --background: #ffffff;
+  --foreground: #171717;
+  --cream: #f5f1e8;
+
+  /* Forest Colors */
+  --forest-50: #f0f4f1;
+  --forest-100: #d9e5dc;
+  --forest-200: #b3cbb9;
+  --forest-300: #8db196;
+  --forest-400: #679773;
+  --forest-500: #4a6f54;
+  --forest-600: #3d5a44;
+  --forest-700: #304534;
+  --forest-800: #233024;
+  --forest-900: #161b14;
+
+  /* Walnut Colors */
+  --walnut-50: #f7f3f0;
+  --walnut-100: #e8dfd7;
+  --walnut-200: #d1bfaf;
+  --walnut-300: #ba9f87;
+  --walnut-400: #a37f5f;
+  --walnut-500: #6b4423;
+  --walnut-600: #56371c;
+  --walnut-700: #412a15;
+  --walnut-800: #2c1c0e;
+  --walnut-900: #170f07;
+
+  /* Antique Colors */
+  --antique-50: #fdfaf5;
+  --antique-100: #f9f0e0;
+  --antique-200: #f3e1c1;
+  --antique-300: #edd2a2;
+  --antique-400: #e7c383;
+  --antique-500: #d4a855;
+  --antique-600: #aa8644;
+  --antique-700: #7f6533;
+  --antique-800: #554322;
+  --antique-900: #2a2111;
+}
+
+@theme inline {
+  /* Color Mappings */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-cream: var(--cream);
+
+  /* Forest Palette */
+  --color-forest-50: var(--forest-50);
+  --color-forest-100: var(--forest-100);
+  --color-forest-200: var(--forest-200);
+  --color-forest-300: var(--forest-300);
+  --color-forest-400: var(--forest-400);
+  --color-forest-500: var(--forest-500);
+  --color-forest-600: var(--forest-600);
+  --color-forest-700: var(--forest-700);
+  --color-forest-800: var(--forest-800);
+  --color-forest-900: var(--forest-900);
+
+  /* Walnut Palette */
+  --color-walnut-50: var(--walnut-50);
+  --color-walnut-100: var(--walnut-100);
+  --color-walnut-200: var(--walnut-200);
+  --color-walnut-300: var(--walnut-300);
+  --color-walnut-400: var(--walnut-400);
+  --color-walnut-500: var(--walnut-500);
+  --color-walnut-600: var(--walnut-600);
+  --color-walnut-700: var(--walnut-700);
+  --color-walnut-800: var(--walnut-800);
+  --color-walnut-900: var(--walnut-900);
+
+  /* Antique Palette */
+  --color-antique-50: var(--antique-50);
+  --color-antique-100: var(--antique-100);
+  --color-antique-200: var(--antique-200);
+  --color-antique-300: var(--antique-300);
+  --color-antique-400: var(--antique-400);
+  --color-antique-500: var(--antique-500);
+  --color-antique-600: var(--antique-600);
+  --color-antique-700: var(--antique-700);
+  --color-antique-800: var(--antique-800);
+  --color-antique-900: var(--antique-900);
+
+  /* Font Families */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-zilla);
+  --font-body: var(--font-inter);
+
+  /* Custom Shadows */
+  --shadow-tactile: 0 4px 6px -1px rgba(107, 68, 35, 0.1), 0 2px 4px -1px rgba(107, 68, 35, 0.06);
+  --shadow-tactile-lg: 0 10px 15px -3px rgba(107, 68, 35, 0.1), 0 4px 6px -2px rgba(107, 68, 35, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+}
