@@ -127,7 +127,7 @@ export default function Testimonials() {
   };
 
   return (
-    <section id="testimonials" className="py-24 bg-cream relative overflow-hidden">
+    <section id="testimonials" className="pt-12 pb-24 bg-cream relative overflow-hidden">
       <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
         <div className="text-center mb-16">

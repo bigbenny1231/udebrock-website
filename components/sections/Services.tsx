@@ -190,7 +190,7 @@ export default function Services() {
   };
 
   return (
-    <section id="services" className="pt-12 pb-24 bg-cream">
+    <section id="services" className="pt-12 pb-12 bg-cream">
       <div className="container mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-16">
