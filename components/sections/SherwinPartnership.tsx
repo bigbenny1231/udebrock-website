@@ -182,7 +182,7 @@ export default function SherwinPartnership() {
 
                 <div className="flex gap-3">
                   <a
-                    href="https://apps.apple.com/us/app/colorsnap-visualizer/id316256171"
+                    href="https://apps.apple.com/app/colorsnap-visualizer/id316256242"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 py-2 px-4 bg-walnut-100 hover:bg-walnut-200 rounded-lg text-center text-sm font-medium text-walnut-700 transition-colors"
@@ -190,7 +190,7 @@ export default function SherwinPartnership() {
                     iOS App
                   </a>
                   <a
-                    href="https://play.google.com/store/apps/details?id=com.sherwin.colorsnap"
+                    href="https://play.google.com/store/apps/details?id=com.sherwin.colorsnap.visualizer"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 py-2 px-4 bg-walnut-100 hover:bg-walnut-200 rounded-lg text-center text-sm font-medium text-walnut-700 transition-colors"
