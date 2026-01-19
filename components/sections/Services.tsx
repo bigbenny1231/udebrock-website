@@ -172,22 +172,23 @@ export default function Services() {
       <div className="container mx-auto px-6">
         {/* Header */}
         <div className="text-center mb-16">
-          <motion.span
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="inline-block text-antique-600 font-semibold mb-4"
-          >
-            Our Services
-          </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold text-forest-700 mb-4"
+            className="text-4xl md:text-5xl font-bold text-forest-700 mb-3"
           >
-            Expert Finishing for Every Surface
+            Our Services
           </motion.h2>
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.05 }}
+            className="text-2xl md:text-3xl font-semibold text-walnut-700 mb-4"
+          >
+            Quality Finishes That Last
+          </motion.h3>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
