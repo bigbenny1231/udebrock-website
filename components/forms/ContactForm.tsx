@@ -34,13 +34,11 @@ interface FormData {
 const projectTypes = [
   "Interior project",
   "Exterior project",
-  "Door project",
   "Cabinet project",
 ];
 
 const woodProjectTypes = [
   "Exterior project",
-  "Door project",
   "Cabinet project",
 ];
 

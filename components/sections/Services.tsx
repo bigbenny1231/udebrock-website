@@ -89,28 +89,6 @@ const services: Service[] = [
     ],
   },
   {
-    icon: Layers,
-    title: "Door Projects",
-    category: "doors",
-    description:
-      "Restore and refinish doors with precision craftsmanship. From front entryways to interior doors, we bring out the natural beauty of the wood.",
-    thumbnail: "placeholder",
-    projectImages: [
-      {
-        id: 1,
-        url: "placeholder",
-        alt: "Door refinishing - front entry",
-      },
-      { id: 2, url: "placeholder", alt: "Door refinishing - interior doors" },
-      { id: 3, url: "placeholder", alt: "Door refinishing - detail work" },
-      {
-        id: 4,
-        url: "placeholder",
-        alt: "Door refinishing - completed project",
-      },
-    ],
-  },
-  {
     icon: Paintbrush,
     title: "Cabinet Projects",
     category: "cabinets",
@@ -228,7 +206,7 @@ export default function Services() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-8"
+                 className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {services.map((service) => (
             <motion.div

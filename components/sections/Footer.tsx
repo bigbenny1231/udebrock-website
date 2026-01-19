@@ -6,7 +6,6 @@ import { Facebook, Phone, Mail, MapPin } from "lucide-react";
 const services = [
   { name: "Interior Projects", href: "#services" },
   { name: "Exterior Projects", href: "#services" },
-  { name: "Door Projects", href: "#services" },
   { name: "Cabinet Projects", href: "#services" },
 ];
 
@@ -38,9 +37,9 @@ export default function Footer() {
               </h3>
             </div>
             <p className="text-walnut-200 mb-6 leading-relaxed">
-              Northern Michigan&apos;s trusted experts in interior and exterior
-              painting, door refinishing, and cabinet restoration. Family-owned and committed
-              to quality craftsmanship.
+                     Northern Michigan&apos;s trusted experts in interior and exterior
+                     painting and cabinet restoration. Family-owned and committed
+                     to quality craftsmanship.
             </p>
             {/* Social */}
             <div className="flex gap-4">
