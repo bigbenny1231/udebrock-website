@@ -37,9 +37,9 @@ export default function Hero() {
           className="max-w-2xl w-full"
         >
           {/* Headline */}
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-forest-700 leading-tight mb-4 md:mb-6">
-              Expert Finishing{" "}
-              <span className="text-walnut-500">For Every Surface</span>
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 md:mb-6">
+              <span className="block text-forest-700">Expert Finishing</span>
+              <span className="block text-walnut-500">For Every Surface</span>
             </h1>
 
             {/* Subheadline */}
