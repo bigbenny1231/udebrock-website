@@ -125,7 +125,45 @@ function sendNotificationEmail(data) {
   if (colors.primaryColor) subject += ' [Colors Selected]';
   if (colors.needsColorHelp) subject += ' [Needs SW Consultation]';
   
-  const body = `
+  // Generate links
+  const sheetUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
+  const driveUrl = `https://drive.google.com/drive/folders/${DRIVE_FOLDER_ID}`;
+  
+  // HTML email body with clickable links
+  const htmlBody = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px;">
+      <h2 style="color: #4a6f54;">NEW LEAD - UDEBROCK FAMILY FINISHES</h2>
+      <hr style="border: 1px solid #4a6f54;">
+      
+      <p><strong>Lead ID:</strong> ${data.leadId}</p>
+      <p><strong>Name:</strong> ${data.name}</p>
+      <p><strong>Email:</strong> <a href="mailto:${data.email}">${data.email}</a></p>
+      <p><strong>Phone:</strong> ${data.phone || 'Not provided'}</p>
+      <p><strong>Project:</strong> ${data.projectType}</p>
+      
+      <h3 style="color: #6b4423; margin-top: 20px;">Message:</h3>
+      <p style="background: #f5f1e8; padding: 10px; border-left: 3px solid #4a6f54;">${data.message}</p>
+      
+      <h3 style="color: #6b4423; margin-top: 20px;">Colors:</h3>
+      <ul>
+        <li><strong>Primary:</strong> ${colors.primaryColor || 'Not specified'}</li>
+        <li><strong>Secondary:</strong> ${colors.secondaryColor || 'Not specified'}</li>
+        <li><strong>Stain:</strong> ${colors.stainColor || 'Not specified'}</li>
+        <li><strong>Needs Help:</strong> ${colors.needsColorHelp ? 'YES' : 'No'}</li>
+      </ul>
+      
+      <hr style="border: 1px solid #4a6f54; margin: 30px 0;">
+      
+      <h3 style="color: #4a6f54;">Quick Access Links:</h3>
+      <p>
+        <a href="${sheetUrl}" style="display: inline-block; background: #4a6f54; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-right: 10px;">📊 View Google Sheet</a>
+        <a href="${driveUrl}" style="display: inline-block; background: #6b4423; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">📁 View Drive Folder</a>
+      </p>
+    </div>
+  `;
+  
+  // Plain text fallback
+  const plainBody = `
 NEW LEAD - UDEBROCK FAMILY FINISHES
 ====================================
 Lead ID: ${data.leadId}
@@ -142,9 +180,18 @@ Primary: ${colors.primaryColor || 'Not specified'}
 Secondary: ${colors.secondaryColor || 'Not specified'}
 Stain: ${colors.stainColor || 'Not specified'}
 Needs Help: ${colors.needsColorHelp ? 'YES' : 'No'}
+
+QUICK ACCESS LINKS:
+Google Sheet: ${sheetUrl}
+Drive Folder: ${driveUrl}
   `;
   
-  MailApp.sendEmail(NOTIFICATION_EMAIL, subject, body);
+  MailApp.sendEmail({
+    to: NOTIFICATION_EMAIL,
+    subject: subject,
+    htmlBody: htmlBody,
+    body: plainBody
+  });
 }
 
 function generateLeadId() {
