@@ -64,26 +64,26 @@ const services: Service[] = [
     category: "exterior",
     description:
       "Protect and beautify your home's exterior with weather-resistant finishes that stand up to Michigan's harsh seasons while enhancing curb appeal.",
-    thumbnail: "placeholder",
+    thumbnail: "/assets/images/exterior-thumbnail.jpg",
     projectImages: [
       {
         id: 1,
-        url: "placeholder",
+        url: "/assets/images/exterior-1.jpg",
         alt: "Exterior painting project - full house",
       },
       {
         id: 2,
-        url: "placeholder",
+        url: "/assets/images/exterior-2.jpg",
         alt: "Exterior painting project - siding detail",
       },
       {
         id: 3,
-        url: "placeholder",
+        url: "/assets/images/exterior-3.jpg",
         alt: "Exterior painting project - trim work",
       },
       {
         id: 4,
-        url: "placeholder",
+        url: "/assets/images/exterior-4.jpg",
         alt: "Exterior painting project - completed home",
       },
     ],
