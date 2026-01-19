@@ -44,7 +44,7 @@ export default function Hero() {
 
             {/* Subheadline */}
             <p className="text-base md:text-xl text-walnut-600 mb-6 md:mb-8 leading-relaxed">
-              A family-owned business dedicated to bringing quality craftsmanship and personal attention to every project. We take pride in transforming your home with expert finishing services, treating each space as if it were our own. Serving Northern Michigan with integrity, reliability, and the care that only a family business can provide.
+              A family-owned business dedicated to bringing quality craftsmanship and personal attention to every project. We take pride in transforming your home with expert finishing services, treating each space as if it were our own.
             </p>
 
           {/* CTAs */}
