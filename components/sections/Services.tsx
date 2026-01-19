@@ -238,17 +238,36 @@ export default function Services() {
               className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
             >
               {/* Project Image */}
-              <div className="relative h-48 overflow-hidden">
+              <div className="relative h-48 overflow-hidden bg-walnut-100">
                 {service.thumbnail && service.thumbnail !== "placeholder" ? (
                   <>
                     <img
                       src={service.thumbnail}
                       alt={service.title}
-                      className="w-full h-full object-cover block"
-                      style={{ display: 'block' }}
+                      className="w-full h-full object-cover"
+                      style={{ 
+                        display: 'block',
+                        position: 'relative',
+                        zIndex: 1,
+                        minHeight: '100%',
+                        width: '100%',
+                        height: '100%'
+                      }}
+                      loading="eager"
+                      decoding="async"
+                      onError={(e) => {
+                        console.error('Image failed to load:', service.thumbnail);
+                        e.currentTarget.style.display = 'none';
+                      }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-br from-forest-500/20 to-walnut-500/40 group-hover:opacity-70 transition-opacity pointer-events-none" />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-walnut-900/50 pointer-events-none">
+                    <div 
+                      className="absolute inset-0 bg-gradient-to-br from-forest-500/20 to-walnut-500/40 group-hover:opacity-70 transition-opacity pointer-events-none"
+                      style={{ zIndex: 2 }}
+                    />
+                    <div 
+                      className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-walnut-900/50 pointer-events-none"
+                      style={{ zIndex: 3 }}
+                    >
                       <span className="text-white font-semibold text-lg">
                         View Gallery →
                       </span>
