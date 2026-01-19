@@ -48,7 +48,7 @@ export default function Navigation() {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
             ? "bg-cream/95 backdrop-blur-sm shadow-md py-1"
-            : "bg-transparent py-2"
+            : "bg-cream/95 backdrop-blur-sm lg:bg-transparent py-2"
         }`}
       >
         <div className="container mx-auto px-6">
@@ -67,7 +67,7 @@ export default function Navigation() {
               <span className="font-bold text-xl md:text-2xl text-forest-700">
                 Udebrock
               </span>
-              <span className="hidden sm:inline font-bold text-xl md:text-2xl text-walnut-500">
+              <span className="font-bold text-xl md:text-2xl text-walnut-500">
                 Family Finishes
               </span>
             </Link>
@@ -135,10 +135,20 @@ export default function Navigation() {
                 </button>
 
                 {/* Logo */}
-                <div className="mb-8">
-                  <span className="font-bold text-xl text-forest-700">
-                    Udebrock Family Finishes
-                  </span>
+                <div className="mb-8 flex items-center gap-2">
+                  <img 
+                    src="/assets/images/company-logo.png" 
+                    alt="Udebrock Family Finishes Logo" 
+                    className="h-10 w-10 object-contain"
+                  />
+                  <div>
+                    <span className="font-bold text-xl text-forest-700 block">
+                      Udebrock
+                    </span>
+                    <span className="font-bold text-xl text-walnut-500 block">
+                      Family Finishes
+                    </span>
+                  </div>
                 </div>
 
                 {/* Links */}
