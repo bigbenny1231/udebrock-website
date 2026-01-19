@@ -178,7 +178,7 @@ export default function Services() {
             viewport={{ once: true }}
             className="inline-block text-antique-600 font-semibold mb-4"
           >
-            What We Do
+            Our Services
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -186,7 +186,7 @@ export default function Services() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-bold text-forest-700 mb-4"
           >
-            Our Expertise
+            Expert Finishing for Every Surface
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -195,8 +195,7 @@ export default function Services() {
             transition={{ delay: 0.1 }}
             className="text-lg text-walnut-600 max-w-2xl mx-auto"
           >
-            Craftsmanship that protects and beautifies your home&apos;s most
-            important surfaces
+            Professional craftsmanship that enhances and protects the beauty of your home, inside and out
           </motion.p>
         </div>
 
