@@ -116,7 +116,7 @@ const services: Service[] = [
     category: "cabinets",
     description:
       "Breathe new life into your kitchen and bathroom cabinets with professional refinishing that saves money while delivering stunning results.",
-    thumbnail: "/assets/images/cabinet-thumbnail.jpg",
+    thumbnail: "/assets/images/cabinet-thumbnail.png",
     projectImages: [
       {
         id: 1,
