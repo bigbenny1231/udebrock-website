@@ -44,7 +44,7 @@ export default function Hero() {
 
             {/* Subheadline */}
             <p className="text-base md:text-xl text-walnut-600 mb-6 md:mb-8 leading-relaxed">
-              A family-owned business dedicated to bringing quality craftsmanship and personal attention to every project. We take pride in transforming your home with expert finishing services, treating each space as if it were our own.
+              As a family-owned business, we're committed to quality craftsmanship and personal attention on every project. We take pride in transforming your home with expert finishing services, treating each space with the same care we'd give our own.
             </p>
 
           {/* CTAs */}
