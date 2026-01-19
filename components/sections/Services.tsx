@@ -176,19 +176,10 @@ export default function Services() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold text-forest-700 mb-3"
+            className="text-4xl md:text-5xl font-bold text-forest-700 mb-4"
           >
             Our Services
           </motion.h2>
-          <motion.h3
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.05 }}
-            className="text-2xl md:text-3xl font-semibold text-walnut-700 mb-4"
-          >
-            Quality Finishes That Last
-          </motion.h3>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
