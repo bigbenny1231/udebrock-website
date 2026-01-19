@@ -116,22 +116,22 @@ const services: Service[] = [
     category: "cabinets",
     description:
       "Breathe new life into your kitchen and bathroom cabinets with professional refinishing that saves money while delivering stunning results.",
-    thumbnail: "placeholder",
+    thumbnail: "/assets/images/cabinet-thumbnail.jpg",
     projectImages: [
       {
         id: 1,
-        url: "placeholder",
+        url: "/assets/images/cabinet-1.jpg",
         alt: "Cabinet refinishing - kitchen cabinets",
       },
       {
         id: 2,
-        url: "placeholder",
+        url: "/assets/images/cabinet-2.jpg",
         alt: "Cabinet refinishing - bathroom vanity",
       },
-      { id: 3, url: "placeholder", alt: "Cabinet refinishing - detail work" },
+      { id: 3, url: "/assets/images/cabinet-3.jpg", alt: "Cabinet refinishing - detail work" },
       {
         id: 4,
-        url: "placeholder",
+        url: "/assets/images/cabinet-4.jpg",
         alt: "Cabinet refinishing - completed kitchen",
       },
     ],
