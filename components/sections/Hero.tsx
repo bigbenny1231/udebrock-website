@@ -17,14 +17,15 @@ export default function Hero() {
     <section
       id="home"
       className="relative flex flex-col md:flex-row bg-cream overflow-hidden"
-      style={{ minHeight: 'calc(100vh - 80px)', marginTop: '80px' }}
+      style={{ height: 'calc(100vh - 80px)', marginTop: '80px' }}
     >
       {/* Left Side - Image Section */}
-      <div className="w-full md:w-1/2 flex items-center justify-center bg-cream p-4 md:p-8 h-full overflow-hidden">
+      <div className="w-full md:w-1/2 flex items-center justify-center bg-cream p-2 md:p-8 overflow-hidden" style={{ height: '100%', maxHeight: 'calc(100vh - 80px)' }}>
         <img
           src="/assets/images/hero-background.jpg.jpg"
           alt="Udebrock Family"
-          className="rounded-lg shadow-lg w-full max-w-lg h-full object-cover"
+          className="rounded-lg shadow-lg w-full max-w-lg object-cover"
+          style={{ height: '100%', maxHeight: '100%', width: 'auto' }}
         />
       </div>
 
