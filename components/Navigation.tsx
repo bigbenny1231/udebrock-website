@@ -7,7 +7,7 @@ import { Menu, X, Phone } from "lucide-react";
 
 const navLinks = [
   { label: "Services", href: "#services" },
-  { label: "Colors", href: "#explore-colors" },
+  { label: "View Your Room", href: "#explore-colors" },
   { label: "Reviews", href: "#testimonials" },
   { label: "Pay Invoice", href: "#payment" },
   { label: "Contact", href: "#contact" },
@@ -29,13 +29,17 @@ export default function Navigation() {
     e.preventDefault();
     setIsMobileMenuOpen(false); // Close mobile menu if open
     const targetIdClean = targetId.replace('#', '');
-    const element = document.getElementById(targetIdClean);
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop - 80, // Adjust for fixed header height
-        behavior: 'smooth',
-      });
-    }
+    
+    // Small delay to ensure DOM is ready, especially for mobile menu
+    setTimeout(() => {
+      const element = document.getElementById(targetIdClean);
+      if (element) {
+        window.scrollTo({
+          top: element.offsetTop - 80, // Adjust for fixed header height
+          behavior: 'smooth',
+        });
+      }
+    }, 100);
   };
 
   return (

@@ -14,7 +14,7 @@ const quickLinks = [
   { name: "Reviews", href: "#testimonials" },
   { name: "Get Estimate", href: "#contact" },
   { name: "Pay Invoice", href: "#payment" },
-  { name: "Colors", href: "#colors" },
+  { name: "View Your Room", href: "#explore-colors" },
 ];
 
 export default function Footer() {
