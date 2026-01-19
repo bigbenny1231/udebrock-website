@@ -6,6 +6,7 @@ NO AUTHENTICATION REQUIRED - Works with public pages only
 import asyncio
 import json
 import os
+import re
 from datetime import datetime
 from pathlib import Path
 from playwright.async_api import async_playwright
@@ -62,6 +63,9 @@ class UdebrockScraper:
                 
                 # Extract all content with infinite scroll on main page
                 await self._extract_all_content(page)
+                
+                # Extract reviews
+                await self._extract_reviews(page)
                 
                 # Save results
                 self._save_results()
@@ -222,6 +226,305 @@ class UdebrockScraper:
                 continue
         
         print(f"[OK] Total images: {len(self.results['images'])}")
+    
+    async def _extract_reviews(self, page):
+        """Extract reviews from Facebook reviews page - go directly to reviews URL"""
+        print("")
+        print("[INFO] Extracting reviews...")
+        
+        # Ensure no double slashes in URL
+        base_url = self.page_url.rstrip('/')
+        reviews_url = f"{base_url}/reviews"
+        
+        try:
+            # Go directly to reviews URL
+            print(f"[INFO] Navigating directly to reviews page: {reviews_url}")
+            await page.goto(reviews_url, wait_until='networkidle', timeout=30000)
+            await page.wait_for_timeout(3000)
+            
+            # Verify we're on the reviews page
+            current_url = page.url
+            print(f"  [INFO] Current URL: {current_url}")
+            if '/reviews' not in current_url:
+                print("  [WARN] Not on reviews page, waiting for redirect...")
+                await page.wait_for_timeout(2000)
+                current_url = page.url
+                print(f"  [INFO] Updated URL: {current_url}")
+            
+            print("[INFO] Scrolling to load more reviews...")
+            
+            # Infinite scroll for reviews
+            last_height = await page.evaluate('document.body.scrollHeight')
+            scroll_attempts = 0
+            max_scrolls = 10
+            
+            while scroll_attempts < max_scrolls:
+                await page.evaluate('window.scrollTo(0, document.body.scrollHeight)')
+                await page.wait_for_timeout(2000)
+                
+                new_height = await page.evaluate('document.body.scrollHeight')
+                
+                if new_height == last_height:
+                    await page.wait_for_timeout(1000)
+                    new_height = await page.evaluate('document.body.scrollHeight')
+                    if new_height == last_height:
+                        break
+                
+                last_height = new_height
+                scroll_attempts += 1
+                print(f"  [INFO] Scroll {scroll_attempts}/{max_scrolls}")
+            
+            # Look for individual review cards - each review is in its own article element
+            print("[INFO] Looking for individual review elements...")
+            
+            # Find all article elements first
+            all_articles = await page.locator('[role="article"]').all()
+            print(f"  [INFO] Found {len(all_articles)} article elements total")
+            
+            reviews_found = []
+            seen_texts = set()  # Track unique reviews to avoid duplicates
+            
+            for elem in all_articles:
+                try:
+                    text = await elem.inner_text(timeout=1000)
+                    if not text or len(text) < 50:
+                        continue
+                    
+                    # Must contain "recommends Elite Painting" pattern to be a review
+                    if 'recommends' not in text.lower() or 'elite painting' not in text.lower():
+                        continue
+                    
+                    # Skip if it's the header/overview (contains "100% recommend" or follower count)
+                    if '100% recommend' in text or 'followers' in text or 'following' in text:
+                        continue
+                    
+                    # Skip if it's just the business response (starts with "Elite Painting" and is short)
+                    lines = text.split('\n')
+                    if len(lines) > 0 and lines[0].strip() == 'Elite Painting' and len(text) < 200:
+                        continue
+                    
+                    # Extract a unique identifier from the review (first 100 chars of review text)
+                    # Find the actual review text (after "recommends Elite Painting")
+                    review_match = re.search(r'recommends[^\\n]*Elite Painting[^\\n]*\\n\\n(.{50,})', text, re.DOTALL | re.IGNORECASE)
+                    if review_match:
+                        review_snippet = review_match.group(1)[:100].strip()
+                    else:
+                        # Fallback: use first meaningful line
+                        review_snippet = text[:100].strip()
+                    
+                    # Skip if we've seen this review before
+                    if review_snippet in seen_texts:
+                        continue
+                    
+                    seen_texts.add(review_snippet)
+                    reviews_found.append(elem)
+                    
+                except Exception as e:
+                    continue
+            
+            print(f"  [OK] Found {len(reviews_found)} unique review elements")
+            
+            if not reviews_found:
+                print("  [WARN] No review elements found with standard selectors")
+                # Try more aggressive selectors
+                print("  [INFO] Trying alternative selectors...")
+                alternative_selectors = [
+                    'div[role="article"]',
+                    'div[data-pagelet]',
+                    'div[class*="review"]',
+                    'div[class*="Review"]',
+                    'span[dir="auto"]',
+                    'div.x1n2onr6'  # Another common Facebook container class
+                ]
+                
+                for alt_selector in alternative_selectors:
+                    try:
+                        alt_elements = await page.locator(alt_selector).all()
+                        if alt_elements and len(alt_elements) > 0:
+                            print(f"  [INFO] Found {len(alt_elements)} elements with {alt_selector}, checking for reviews...")
+                            # Check if any contain review-like text
+                            for elem in alt_elements[:10]:
+                                try:
+                                    text = await elem.inner_text(timeout=1000)
+                                    if text and ('star' in text.lower() or 'review' in text.lower() or 'rating' in text.lower()):
+                                        reviews_found.append(elem)
+                                        print(f"  [OK] Found potential review element")
+                                except:
+                                    continue
+                            if reviews_found:
+                                break
+                    except:
+                        continue
+                
+                if not reviews_found:
+                    # Try to find any text content that might be reviews
+                    all_text = await page.locator('body').inner_text()
+                    if 'review' in all_text.lower() or 'star' in all_text.lower():
+                        print("  [INFO] Review content detected but couldn't parse structure")
+                        print("  [INFO] Facebook reviews may require authentication or have changed structure")
+            
+            # Extract review data - look for actual reviews with star ratings
+            for i, elem in enumerate(reviews_found[:30]):  # Check more elements
+                try:
+                    # First check if this element has star ratings (likely a review)
+                    has_stars = False
+                    rating = 5  # Default
+                    
+                    # Look for star indicators in various formats
+                    star_selectors = [
+                        'span[aria-label*="star"]',
+                        'span[aria-label*="Star"]',
+                        'span:has-text("★")',
+                        'span:has-text("⭐")',
+                        'div[aria-label*="star"]',
+                        'div[aria-label*="Star"]'
+                    ]
+                    
+                    for star_selector in star_selectors:
+                        try:
+                            star_elem = await elem.locator(star_selector).first
+                            if await star_elem.count() > 0:
+                                has_stars = True
+                                # Try to get rating from aria-label
+                                aria_label = await star_elem.get_attribute('aria-label', timeout=500)
+                                if aria_label:
+                                    # Extract number from aria-label like "5 out of 5 stars"
+                                    match = re.search(r'(\d+)', aria_label)
+                                    if match:
+                                        rating = int(match.group(1))
+                                else:
+                                    # Count stars in text
+                                    star_text = await star_elem.inner_text(timeout=500)
+                                    if star_text:
+                                        rating = star_text.count('★') + star_text.count('⭐')
+                                        if rating == 0:
+                                            rating = 5
+                                break
+                        except:
+                            continue
+                    
+                    # Get text preview first to check content
+                    text_preview = await elem.inner_text(timeout=1000)
+                    if not text_preview or len(text_preview) < 10:
+                        continue
+                    
+                    # Must contain "recommends" to be a real review, or have clear review indicators
+                    if 'recommends' not in text_preview.lower():
+                        # Check if it's a review by other indicators
+                        if not has_stars and 'star' not in text_preview.lower():
+                            # Skip if it's clearly a post (has date patterns like "January 2 at 1:08 PM")
+                            if any(pattern in text_preview for pattern in ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']):
+                                if 'at' in text_preview and ('PM' in text_preview or 'AM' in text_preview):
+                                    continue  # This is a post, not a review
+                    
+                    # Skip obvious non-review content
+                    skip_patterns = ['Send message', 'All reactions:', 'Like', 'Comment', 'Share', 'Elite Painting\nJanuary']
+                    if any(pattern in text_preview for pattern in skip_patterns):
+                        if 'recommends' not in text_preview.lower():
+                            continue
+                    
+                    # Get full text
+                    text = await elem.inner_text(timeout=2000)
+                    
+                    if not text or len(text) < 20:
+                        continue
+                    
+                    # Extract author name - format is "Name recommends Elite Painting."
+                    author = 'Customer'
+                    try:
+                        # Look for pattern like "Stef Candea recommends Elite Painting."
+                        match = re.search(r'^([A-Z][a-z]+(?:\\s+[A-Z][a-z]+)*)\\s+recommends\\s+Elite\\s+Painting', text, re.MULTILINE | re.IGNORECASE)
+                        if match:
+                            author = match.group(1).strip()
+                        else:
+                            # Try to find name in the first line before "recommends"
+                            lines = text.split('\n')
+                            for line in lines[:5]:
+                                line = line.strip()
+                                if 'recommends' in line.lower() and 'elite' in line.lower():
+                                    # Extract name before "recommends"
+                                    parts = re.split(r'\\s+recommends', line, flags=re.IGNORECASE, maxsplit=1)
+                                    if parts and len(parts[0].strip()) < 50:
+                                        author = parts[0].strip()
+                                        break
+                    except:
+                        pass
+                    
+                    # Extract review text - everything after the date, before "All reactions" or business response
+                    review_text = text.strip()
+                    
+                    # Pattern: "Name recommends Elite Painting.\nDate\n·\nReview text here\nAll reactions:"
+                    # Extract text between date and "All reactions:" or business response
+                    match = re.search(
+                        r'recommends[^\\n]*Elite Painting[^\\n]*\\n([^\\n]+\\s+\\d{4})[^\\n]*\\n[^\\n]*\\n(.+?)(?:\\nAll reactions:|\\nElite Painting|$)',
+                        review_text,
+                        re.DOTALL | re.IGNORECASE
+                    )
+                    
+                    if match:
+                        review_text = match.group(2).strip()
+                    else:
+                        # Fallback: try to find text after date pattern
+                        match = re.search(
+                            r'(January|February|March|April|May|June|July|August|September|October|November|December)\\s+\\d{1,2},\\s+\\d{4}[^\\n]*\\n[^\\n]*\\n(.+?)(?:\\nAll reactions:|\\nElite Painting|$)',
+                            review_text,
+                            re.DOTALL | re.IGNORECASE
+                        )
+                        if match:
+                            review_text = match.group(2).strip()
+                        else:
+                            # Last resort: remove everything before first meaningful content
+                            # Remove author and "recommends" line
+                            review_text = re.sub(r'^[^\\n]+recommends[^\\n]+\\n', '', review_text, flags=re.IGNORECASE)
+                            # Remove date line
+                            review_text = re.sub(r'^[^\\n]*\\d{4}[^\\n]*\\n[^\\n]*\\n', '', review_text)
+                    
+                    # Remove "See more" / "See less" links
+                    review_text = re.sub(r'\\s*…\\s*See more', '', review_text, flags=re.IGNORECASE)
+                    review_text = re.sub(r'\\s*See more', '', review_text, flags=re.IGNORECASE)
+                    review_text = re.sub(r'\\s*See less', '', review_text, flags=re.IGNORECASE)
+                    
+                    # Remove "All reactions:" and everything after it
+                    review_text = re.sub(r'\\nAll reactions:.*$', '', review_text, flags=re.DOTALL | re.IGNORECASE)
+                    
+                    # Remove business response (starts with "Elite Painting")
+                    review_text = re.sub(r'\\nElite Painting.*$', '', review_text, flags=re.DOTALL)
+                    
+                    # Remove reaction counts and time stamps (like "35w", "3y", "4y")
+                    review_text = re.sub(r'\\b\\d+[wy]\\b', '', review_text)
+                    
+                    # Clean up extra whitespace and newlines
+                    review_text = ' '.join(review_text.split())
+                    
+                    # Remove any remaining date patterns
+                    review_text = re.sub(r'\\b(January|February|March|April|May|June|July|August|September|October|November|December)\\s+\\d{1,2},\\s+\\d{4}\\b', '', review_text, flags=re.IGNORECASE)
+                    review_text = ' '.join(review_text.split())  # Clean again
+                    
+                    # Only add if we have meaningful review text
+                    # Be more lenient - accept shorter reviews and don't filter out questions
+                    if len(review_text) > 15:
+                        self.results['reviews'].append({
+                            'index': len(self.results['reviews']) + 1,
+                            'text': review_text[:500],
+                            'full_text': review_text,
+                            'author': author,
+                            'rating': rating,
+                            'extracted_at': datetime.now().isoformat()
+                        })
+                        
+                        print(f"  [OK] Review {len(self.results['reviews'])}: {author} - {review_text[:60]}...")
+                        
+                        if len(self.results['reviews']) % 5 == 0:
+                            print(f"  [INFO] Collected {len(self.results['reviews'])} reviews...")
+                            
+                except Exception as e:
+                    continue
+            
+            print(f"[OK] Total reviews extracted: {len(self.results['reviews'])}")
+            
+        except Exception as e:
+            print(f"[WARN] Could not extract reviews: {e}")
+            print("[INFO] Reviews may require authentication or be unavailable on public page")
     
     async def _extract_reviews_OLD(self, page):
         """Extract reviews with infinite scroll"""

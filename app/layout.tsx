@@ -1,43 +1,44 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Zilla_Slab, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const zillaSlab = Zilla_Slab({
-  variable: "--font-zilla",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+import Navigation from "@/components/Navigation";
 
 const inter = Inter({
-  variable: "--font-inter",
   subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
-  title: "U Debrock Finishes - Custom Wood Finishing & Restoration",
-  description: "Professional wood finishing, refinishing, and restoration services. Specializing in antique furniture, cabinetry, and custom finishes.",
+  title: "Udebrock Family Finishes | Premium Wood Staining & Protection",
+  description:
+    "Northern Michigan's trusted experts in wood staining, deck restoration, and exterior protection. Family-owned, using premium Sherwin-Williams products.",
+  keywords: [
+    "wood staining",
+    "deck restoration",
+    "exterior painting",
+    "Houghton Lake Michigan",
+    "Higgins Lake Michigan",
+    "Roscommon Michigan",
+    "Sherwin-Williams",
+    "fence staining",
+  ],
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${zillaSlab.variable} ${inter.variable} antialiased`}
-      >
+    <html lang="en" className={inter.variable}>
+      <body className="font-body bg-cream text-walnut-800 antialiased" suppressHydrationWarning>
+        <Navigation />
         {children}
       </body>
     </html>
