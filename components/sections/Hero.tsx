@@ -24,12 +24,7 @@ export default function Hero() {
         <img
           src="/assets/images/hero-background.jpg.jpg"
           alt="Udebrock Family"
-          className="rounded-lg shadow-lg w-full max-w-md md:max-w-lg object-cover md:h-full"
-          style={{ 
-            maxHeight: '50vh',
-            height: 'auto',
-            width: '100%'
-          }}
+          className="rounded-lg shadow-lg w-full max-w-md md:max-w-lg object-cover h-[50vh] md:h-full md:max-h-full"
         />
       </div>
 
