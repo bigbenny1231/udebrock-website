@@ -244,10 +244,11 @@ export default function Services() {
                     <img
                       src={service.thumbnail}
                       alt={service.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover block"
+                      style={{ display: 'block' }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-br from-forest-500/20 to-walnut-500/40 group-hover:opacity-70 transition-opacity" />
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-walnut-900/50">
+                    <div className="absolute inset-0 bg-gradient-to-br from-forest-500/20 to-walnut-500/40 group-hover:opacity-70 transition-opacity pointer-events-none" />
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-walnut-900/50 pointer-events-none">
                       <span className="text-white font-semibold text-lg">
                         View Gallery →
                       </span>
