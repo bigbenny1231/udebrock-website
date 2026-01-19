@@ -34,12 +34,16 @@ export default function Navigation() {
     setTimeout(() => {
       const element = document.getElementById(targetIdClean);
       if (element) {
+        const headerOffset = 100; // Account for fixed header
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
         window.scrollTo({
-          top: element.offsetTop - 80, // Adjust for fixed header height
+          top: offsetPosition,
           behavior: 'smooth',
         });
       }
-    }, 100);
+    }, 200);
   };
 
   return (
